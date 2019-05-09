@@ -25,15 +25,18 @@ Prototype Refactor
   * dimensions (These represent the character's size in the video game)
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
-function GameObject(gameObjectAttributes) {
-    this.createdAt = gameObjectAttributes.createdAt;
-    this.name = gameObjectAttributes.name;
-    this.dimensions = gameObjectAttributes.dimensions;
+class GameObject {
+    constructor(gameObjectAttributes){
+        this.createdAt = gameObjectAttributes.createdAt;
+        this.name = gameObjectAttributes.name;
+        this.dimensions = gameObjectAttributes.dimensions;
+    }
+    destroy(){
+        return `${this.name} was removed from the game.`;
+    }
   }
   
-  GameObject.prototype.destroy = function () {
-    return `${this.name} was removed from the game.`;
-    };
+
   
   /*
     === CharacterStats ===
@@ -41,15 +44,16 @@ function GameObject(gameObjectAttributes) {
     * takeDamage() // prototype method -> returns the string '<object name> took damage.'
     * should inherit destroy() from GameObject's prototype
   */
-  function CharacterStats(characterStatsAttributes) {
-    GameObject.call(this, characterStatsAttributes);
-    this.healthPoints = characterStatsAttributes.healthPoints;
+  class CharacterStats extends GameObject{
+    constructor(characterStatsAttributes){
+        super(characterStatsAttributes);
+        this.name = characterStatsAttributes.name;
+        this.healthPoints = characterStatsAttributes.healthPoints;
   }
-  
-  CharacterStats.prototype = Object.create(GameObject.prototype)
-  CharacterStats.prototype.takeDamage = function() {
-      return `${this.name} took damage`;
-    }
+  takeDamage() {
+    return `${this.name} took damage`;
+  }
+}
   
   /*
     === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -60,17 +64,21 @@ function GameObject(gameObjectAttributes) {
     * should inherit destroy() from GameObject through CharacterStats
     * should inherit takeDamage() from CharacterStats
   */
-  function Humanoid(humanoidAttributes) {
-    CharacterStats.call(this, humanoidAttributes)
-    this.team = humanoidAttributes.team;
-    this.weapons = humanoidAttributes.weapons;
-    this.language = humanoidAttributes.language
-    GameObject.call(this, humanoidAttributes)
+  class Humanoid extends CharacterStats{
+    constructor(humanoidAttributes){
+        super(humanoidAttributes);
+        this.team = humanoidAttributes.team;
+        this.weapons = humanoidAttributes.weapons;
+        this.language = humanoidAttributes.language;
   }
-  Humanoid.prototype = Object.create(CharacterStats.prototype)
-  Humanoid.prototype.greet = function () {
-    return `${this.name} offers a greeting in ${this.language}.`
-    };
+  greet() {
+    return `${this.name} offers a greeting in ${this.language}.`;
+    }
+}
+
+//At first I thought I have to use multiple interitance and use Humanoid extends GameObject.
+//Just in case, there is no direct multiple inheritance but it would work out like this.
+//Humanoid.prototype.takeDamage = CharacterStats.prototype.takeDamage;
   
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
