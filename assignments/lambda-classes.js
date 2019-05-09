@@ -70,9 +70,9 @@ class Student extends Person {
         this.favSubject = favSubject;
     }
     listsSubjects() {
-        this.favSubject.forEach(element => {
-            console.log(element);
-        });
+        this.favSubject.map(function(subject){
+            console.log(subject);
+        })
     }
     PRAssignment (subject) {
         return `${this.name} has begun sprint challenge on ${subject}`;
@@ -184,10 +184,10 @@ console.log(josh.speak());
 console.log(elan.speak());
 console.log(adam.speak());
 
-console.log(sascha.listsSubjects());
+sascha.listsSubjects();
 console.log(sascha.PRAssignment('Assembler'));
 
-console.log(ben.listsSubjects());
+ben.listsSubjects();
 console.log(ben.PRAssignment('Kung-Fu'));
 
 console.log(dan.demo('CSS'));
